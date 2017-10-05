@@ -57,3 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
+# private data to keep locally
+*.private.json
+!example.private.json
+
+# **/node_modules/
+
+.idea/
+

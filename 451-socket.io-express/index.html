@@ -1,0 +1,51 @@
+<html>
+<head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    /* globals io */
+    debug       = console.log;
+    var url     = '/';
+    var options = {
+      transports: [
+        'polling', // default
+        'websocket'
+      ],
+      upgrade: false,
+    };
+    var socket  = io(url, options);//.connect('/');
+
+    debug('[.] io.protocol:', io.protocol);
+
+    socket.on('server-event', function (data) {
+      debug('[>] socket.on(server-event):', data);
+
+      socket.emit('client-event', { clientProperty: 'clientValue' });
+      debug('[<] socket.emit(server-event):', data);
+    });
+
+    [
+      { event: 'message',           param: 'data'    }, // ?????
+      { event: 'connect',                            },
+      { event: 'connect_error',     param: 'error'   },
+      { event: 'connect_timeout'                     },
+      { event: 'error' ,            param: 'error'   },
+      { event: 'disconnect' ,       param: 'reason'  },
+      { event: 'reconnect',         param: 'attempt' },
+      { event: 'reconnect_attempt',                  },
+      { event: 'reconnecting',      param: 'attempt' },
+      { event: 'reconnect_error',   param: 'error'   },
+      { event: 'reconnect_failed'                    },
+      { event: 'ping',                               },
+      { event: 'pong',              param: 'ms'      },
+    ].forEach(function(eventDef) {
+      socket.on(eventDef.event, function (data) {
+        if (eventDef.param) debug(`[.] ${eventDef.event}, ${eventDef.param}:`, data);
+        else debug(`[.] ${eventDef.event}`);
+      });
+    });
+
+  </script></head>
+<body>
+
+</body>
+</html>
